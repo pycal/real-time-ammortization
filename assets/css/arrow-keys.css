@@ -1,0 +1,69 @@
+.arrows ul {
+	list-style: none;
+	position: relative;	
+	width: 152px;
+	height: 104px;
+	left: 50%;
+	top: 30%;
+	margin-left: -76px}
+ 
+.arrows li {
+	position: absolute;
+	top: 56px;
+	display: block;
+	text-decoration: none;
+	text-align: center;
+	width: 40px;
+	height: 40px;
+	line-height: 40px;
+	background-color: #f1f1f1;
+	border: 1px solid #eee;
+	border-radius: 8px;
+	box-shadow: 0 6px 10px rgba(0,0,0,.3);
+	animation-duration: 1.5s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite}
+ 
+.arrows li:nth-child(1) {
+	top: 8px;
+	left: 56px;
+	animation-name: clickUp}
+ 
+.arrows li:nth-child(2) {
+	left: 8px;
+	opacity: .3}
+ 
+.arrows li:nth-child(3) {
+	left: 56px;
+	animation-name: clickDown;
+	animation-delay: .75s}
+ 
+.arrows li:nth-child(4) {
+	left: 104px;
+	opacity: .3}
+ 
+ 
+@keyframes clickUp {
+	0% {
+		top: 8px;
+		background-color: #f1f1f1;
+		box-shadow: 0 6px 10px rgba(0,0,0,.3)}
+	100% {
+		top: 10px;
+		background-color: #ebebeb;
+		box-shadow: inset 0 0 40px 10px rgba(0,0,0,.02);
+		box-shadow: 0 2px 4px rgba(0,0,0,.1)}
+}
+ 
+ 
+@keyframes clickDown {
+	0% {
+		top: 56px;
+		background-color: #f1f1f1;
+		box-shadow: 0 6px 10px rgba(0,0,0,.3)}
+	100% {
+		top: 58px;
+		background-color: #ebebeb;
+		box-shadow: inset 0 0 40px 10px rgba(0,0,0,.02);
+		box-shadow: 0 2px 4px rgba(0,0,0,.1)}
+}

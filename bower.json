@@ -1,0 +1,26 @@
+{
+  "name": "ammortize",
+  "version": "0.0.0",
+  "authors": [
+    "Cailen McQuattie <cailen@kmsm.ca>"
+  ],
+  "description": "real time ammortization calculator",
+  "keywords": [
+    "mortgage",
+    "ammortization",
+    "calculator"
+  ],
+  "license": "MIT",
+  "homepage": "http://shittywisdom.guru",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-chart.js": "~0.7.1",
+    "angular": "~1.4.0"
+  }
+}

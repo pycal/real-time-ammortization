@@ -1,0 +1,212 @@
+<!DOCTYPE HTML>
+<html lang="en-US" ng-app="ammortizeApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Real Time Mortgage Amortization Calculator</title>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="assets/css/bootstrap-material.min.css">
+  <link rel="stylesheet" href="assets/css/arrow-keys.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/paper/bootstrap.min.css">
+  <link rel="stylesheet" href="bower_components/angular-chart.js/dist/angular-chart.css">
+  <style>
+    .input-group-addon {
+      width: 50px;
+    }
+  </style>
+</head>
+<body>
+<div class="container" ng-controller="AmortizationController">
+  <div class="content">
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>Real Time Amortization Calculator</h2>
+        </div>
+    </div>
+    <div class="row">
+    <div class="col-sm-5">
+    <div class="bs-component">
+    <form class="form-horizontal" id="monthly_costs">
+      <fieldset>
+      <legend style="width:99%;">Costs</legend>
+        
+        <label for="purchase_price" class="col-sm-4 control-label">Purchase Price</label>
+        <div class="form-group input-group col-sm-5">
+          <div class="input-group-addon">$</div>
+          <input type="number"
+                 step="5000"
+                 min="0"
+                 id="purchase_price"
+                 required
+                 ng-model="purchase_price"
+                 ng-change="updateSchedule()"
+                 class="form-control">
+        </div>
+        <div class="clearfix"></div>
+        <label for="down_payment" class="col-sm-4 control-label">Down Payment</label>
+        <div class="form-group input-group col-sm-5">
+          <div class="input-group-addon">$</div>
+          <input type="number"
+                 step="1000"
+                 min="0"
+                 id="down_payment"
+                 required
+                 ng-model="down_payment"
+                 ng-change="updateSchedule()"
+                 class="form-control">
+        </div>
+        <div class="clearfix"></div>
+        <label for="payments_per_year" class="col-sm-4 control-label">Payment Frequency</label>
+        <div class="form-group input-group col-sm-5">
+          <div class="input-group-addon"> </div>
+          <select
+                 name="payments_per_year"
+                 form="ammortization"
+                 id="payments_per_year"
+                 required
+                 ng-model="payments_per_year"
+                 ng-change="updateSchedule()"
+                 class="form-control">
+                 <option selected value="12">Monthly</option>
+                 <option value="26">Bi-monthly</option>
+                 <option value="52">Weekly</option>
+          </select>
+        </div>
+        <div class="clearfix"></div>
+        <label for="nominal_rate" class="col-sm-4 control-label">Nominal Rate</label>
+        <div class="form-group input-group col-sm-5">
+          <div class="input-group-addon">%</div>
+          <input type="number"
+                 min="0.0"
+                 max="99.9"
+                 step="0.1"
+                 id="nominal_rate"
+                 required
+                 ng-model="nominal_rate"
+                 ng-change="updateSchedule()"
+                 class="form-control">
+        </div>
+        <div class="clearfix"></div>
+        <label for="nominal_rate" class="col-sm-4 control-label">Rate Type</label>
+        <div class="form-group input-group col-sm-5">
+          <div class="input-group-addon"> </div>
+          <select
+                 class="form-control"
+                 name="annual_compounding_periods"
+                 form="ammortization"
+                 id="annual_compounding_periods"
+                 required
+                 ng-model="annual_compounding_periods"
+                 ng-change="updateSchedule()">
+                 <option selected value="2">Fixed Rate</option>
+                 <option value="12">Variable Rate</option>
+          </select>
+        </div>
+        <div class="clearfix"></div>
+        <label for="nominal_rate" class="col-sm-4 control-label">Mortgage Term</label>
+        <div class="form-group input-group col-sm-5" style="position:relative;left:50px">
+          
+          <input type="number"
+                 min="5"
+                 max="25"
+                 step="1"
+                 id="mortgage_term"
+                 required
+                 ng-model="mortgage_term"
+                 ng-change="updateSchedule()"
+                 class="form-control">
+          <div class="input-group-addon">Years</div>
+        </div>
+        <div class="clearfix"></div>
+        <label for="condo_fees" class="col-sm-4 control-label">Condo Fees</label>
+        <div class="form-group input-group col-sm-5">
+          <div class="input-group-addon">$</div>
+          <input type="number"
+                 step="50"
+                 min="0"
+                 id="condo_fees"
+                 required
+                 ng-model="condo_fees"
+                 ng-change="updateMonthlyCosts()"
+                 class="form-control">
+        </div>
+        <div class="clearfix"></div>
+        <label for="condo_fees" class="col-sm-4 control-label">Property Tax</label>
+        <div class="form-group input-group col-sm-5">
+          <div class="input-group-addon">$</div>
+          <input type="number"
+                 step="50"
+                 min="0"
+                 id="property_tax"
+                 required
+                 ng-model="property_tax"
+                 ng-change="updateMonthlyCosts()"
+                 class="form-control">
+        </div>
+      </fieldset>
+    </form>
+    </div><!-- .row well bs-component -->
+    </div><!-- .col-sm-6-->
+
+    <div class="col-sm-7" id="line-chart">
+      <legend><b>Avg Monthly Cost: {{ total_monthly_cost }}</b><i style="font-size:13px;color:gray;margin-left:15px;">(payment amt * {{ payments_per_year }} annual payments / 12 months)</i></legend>
+      <div class="panel panel-default">
+      <div class="panel-heading">Loan payment principal to interest ratio</div>
+      <div class="panel-body">
+      <canvas id="line" class="chart chart-line" data="data"
+        labels="labels" legend="true" series="series"
+        click="onClick">
+      </canvas>
+      </div>
+      <span style="text-align:right;display:block;padding:15px;">
+        Principal: {{ principal }}<br>
+        Interest: {{ total_cost_of_interest }}<br>
+        Total: {{ total_cost_of_ammortization }}<br>
+        Nominal rate: {{ nominal_rate }}<br>
+        Effective rate: {{ effective_rate }}<br>
+        CMHC insurance: {{ cmhc_amount }}<br>
+      </span>
+      </div>
+    </div>
+    </div><!-- .row-->
+  </div><!--.content-->
+  <br><br><br>
+  <div class="modal" id="tip_modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Use the arrow keys to change values quickly</h4>
+        </div>
+        <div class="modal-body arrows">
+          <ul>
+            <li>&#8593;</li>
+            <li>&#8592;</li>
+            <li>&#8595;</li>
+            <li>&#8594;</li>
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary " data-dismiss="modal" aria-hidden="true">Thanks!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!--.container-->
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/Chart.js/Chart.js"></script>
+<script src="bower_components/angular-chart.js/dist/angular-chart.js"></script>
+<script src="assets/js/accounting.js"></script>
+<script src="assets/js/amortization.js"></script>
+<script src="assets/js/application.js"></script>
+<script src="assets/js/jquery-1.11.1.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/jquery.floatThead.js"></script>
+<script>
+    var $table = $('table.schedule');
+    $table.floatThead();
+</script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="assets/js/bootstrap.min.js"></script>
+</body>
+</html>
