@@ -77,10 +77,8 @@
                  required
                  ng-model="payments_per_year"
                  ng-change="updateSchedule()"
-                 class="form-control">
-                 <option selected value="12">Monthly</option>
-                 <option value="26">Bi-monthly</option>
-                 <option value="52">Weekly</option>
+                 class="form-control"
+                 ng-options="option.value as option.name for option in ppy_options">
           </select>
         </div>
         <div class="clearfix"></div>
@@ -108,9 +106,8 @@
                  id="annual_compounding_periods"
                  required
                  ng-model="annual_compounding_periods"
-                 ng-change="updateSchedule()">
-                 <option selected value="2">Fixed Rate</option>
-                 <option value="12">Variable Rate</option>
+                 ng-change="updateSchedule()"
+                 ng-options="option.value as option.name for option in cp_options">
           </select>
         </div>
         <div class="clearfix"></div>
