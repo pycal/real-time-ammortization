@@ -54,7 +54,9 @@ ammortizeApp.controller('AmortizationController', ['$scope', '$location', functi
     };
     
     for (var param in query_params) {
-        if ($scope.ammortization_params.hasOwnProperty(param)) $scope.ammortization_params[param] = Number(query_params[param]).toFixed(2);
+        if ($scope.ammortization_params.hasOwnProperty(param)) {
+            $scope.ammortization_params[param] = Number(query_params[param].replace(/\//g,''));
+        }
     };
 
     ap = $scope.ammortization_params;
