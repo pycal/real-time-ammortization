@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/paper/bootstrap.min.css">
   <link rel="stylesheet" href="bower_components/angular-chart.js/dist/angular-chart.css">
   <link rel="icon" href="favicon.ico">
+  <base href="/">
   <style>
     .input-group-addon {
       width: 50px;
@@ -34,6 +35,7 @@
             <h2>Real Time Amortization Calculator</h2>
         </div>
     </div>
+    
     <div class="row">
     <div class="col-sm-5">
     <div class="bs-component">
@@ -49,7 +51,7 @@
                  min="0"
                  id="purchase_price"
                  required
-                 ng-model="purchase_price"
+                 ng-model="ammortization_params.purchase_price"
                  ng-change="updateSchedule()"
                  class="form-control">
         </div>
@@ -62,7 +64,7 @@
                  min="0"
                  id="down_payment"
                  required
-                 ng-model="down_payment"
+                 ng-model="ammortization_params.down_payment"
                  ng-change="updateSchedule()"
                  class="form-control">
         </div>
@@ -75,7 +77,7 @@
                  form="ammortization"
                  id="payments_per_year"
                  required
-                 ng-model="payments_per_year"
+                 ng-model="ammortization_params.payments_per_year"
                  ng-change="updateSchedule()"
                  class="form-control"
                  ng-options="option.value as option.name for option in ppy_options">
@@ -91,7 +93,7 @@
                  step="0.1"
                  id="nominal_rate"
                  required
-                 ng-model="nominal_rate"
+                 ng-model="ammortization_params.nominal_rate"
                  ng-change="updateSchedule()"
                  class="form-control">
         </div>
@@ -105,7 +107,7 @@
                  form="ammortization"
                  id="annual_compounding_periods"
                  required
-                 ng-model="annual_compounding_periods"
+                 ng-model="ammortization_params.annual_compounding_periods"
                  ng-change="updateSchedule()"
                  ng-options="option.value as option.name for option in cp_options">
           </select>
@@ -120,7 +122,7 @@
                  step="1"
                  id="mortgage_term"
                  required
-                 ng-model="mortgage_term"
+                 ng-model="ammortization_params.mortgage_term"
                  ng-change="updateSchedule()"
                  class="form-control">
           <div class="input-group-addon">Years</div>
@@ -153,6 +155,12 @@
         </div>
       </fieldset>
     </form>
+    <br>
+    <div class="clearfix"></div>
+    <div class="col-sm-12">
+            <label for="easy_url">Copy URL to share</label>
+            <input ng-model="easy_url" id="easy_url" onClick="this.select();" class="form-control">
+        </div>
     </div><!-- .row well bs-component -->
     </div><!-- .col-sm-6-->
 
@@ -201,7 +209,8 @@
     </div>
   </div>
 </div><!--.container-->
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.1/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.1/angular-route.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js"></script>
 <script src="bower_components/angular-chart.js/dist/angular-chart.js"></script>
 <script src="assets/js/accounting.js"></script>
