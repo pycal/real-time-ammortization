@@ -51,6 +51,8 @@ ammortizeApp.controller('AmortizationController', ['$scope', '$location', functi
         'annual_compounding_periods': $scope.cp_options[0].value,
         'effective_rate': 4.0,
         'mortgage_term': 25,
+        'condo_fees': 0,
+        'property_tax': 0,
     };
     
     for (var param in query_params) {
@@ -64,11 +66,6 @@ ammortizeApp.controller('AmortizationController', ['$scope', '$location', functi
     $scope.total_cost_of_ammortization;
     $scope.total_cost_of_interest;
     $scope.data = [[],[],[]];
-
-
-    // Monthly costs
-    $scope.condo_fees = 0;
-    $scope.property_tax = 0;
 
     // Chart
     $scope.series = ['Total', 'Principal', 'Interest'];
@@ -112,7 +109,7 @@ ammortizeApp.controller('AmortizationController', ['$scope', '$location', functi
         $scope.cmhc_required = ammortization.cmhc_required;
         $scope.cmhc_amount = ammortization.cmhc_amount
         $scope.average_monthly_mortgage_cost = ammortization.average_monthly_mortgage_cost;
-        $scope.total_monthly_cost = $scope.condo_fees + $scope.property_tax + ammortization.average_monthly_mortgage_cost;
+        $scope.total_monthly_cost = $scope.ammortization_params.condo_fees + $scope.ammortization_params.property_tax + ammortization.average_monthly_mortgage_cost;
 
         $scope.data = [
           ammortization.payments,
@@ -126,7 +123,8 @@ ammortizeApp.controller('AmortizationController', ['$scope', '$location', functi
     };
 
     $scope.updateMonthlyCosts = function () {
-        $scope.total_monthly_cost = $scope.condo_fees + $scope.property_tax + $scope.average_monthly_mortgage_cost;
+        $scope.total_monthly_cost = $scope.ammortization_params.condo_fees + $scope.ammortization_params.property_tax + $scope.average_monthly_mortgage_cost;
+        $scope.easy_url = make_easy_url();
     }
     
     Number.prototype.toFixedDown = function(digits) {
