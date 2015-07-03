@@ -64,7 +64,6 @@ ammortizeApp.controller('AmortizationController', ['$scope', '$location', functi
     $scope.total_cost_of_ammortization;
     $scope.total_cost_of_interest;
     $scope.data = [[],[],[]];
-    $scope.easy_url = "http://localhost:3000"
 
 
     // Monthly costs
@@ -75,7 +74,7 @@ ammortizeApp.controller('AmortizationController', ['$scope', '$location', functi
     $scope.series = ['Total', 'Principal', 'Interest'];
 
     var make_easy_url = function() {
-        var easy_url = 'http://localhost:3000/?';
+        var easy_url = 'http://pycal.github.io/real-time-ammortization/?';
         for (var param in $scope.ammortization_params) {
             easy_url = easy_url + param + '=' + Number($scope.ammortization_params[param]) + '&';
         }
