@@ -8,7 +8,7 @@ var open_tip_modal = function () {
 
 
 $(".form-control").click( function () {
-	if (!has_focused && !rta_tip) {
+	if (!has_focused && !has_seen_tip) {
 		open_tip_modal();
     has_focused = true;
 	}
